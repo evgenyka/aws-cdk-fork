@@ -49,6 +49,23 @@ describe('repository', () => {
     });
   });
 
+  test('test repositoryUriForTagOrDigest with CfnParameter', () => {
+    // GIVEN
+    const stack = new cdk.Stack();
+    const repository = ecr.Repository.fromRepositoryArn(stack, 'ScanRepo', 'arn:aws:ecr::111111111111:repository/test/test');
+    const param = new cdk.CfnParameter(stack, 'param', {
+      type: 'String',
+    });
+
+    // WHEN
+    new cdk.CfnOutput(stack, 'RepoUri', {
+      value: repository.repositoryUriForTagOrDigest(param.valueAsString),
+    });
+
+    // THEN
+    //console.log(JSON.stringify(Template.fromStack(stack), null, 4));
+  });
+
   test('tag-based lifecycle policy', () => {
     // GIVEN
     const stack = new cdk.Stack();
